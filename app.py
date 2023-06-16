@@ -41,7 +41,8 @@ def clean_data(players):
 
 def balance_teams(players):
     experience_sorted = sorted(
-        players, key=lambda player: player['experience'])
+        players, key=lambda player: player['experience']
+    )
 
     teams = {team: [] for team in TEAMS}
 
@@ -51,13 +52,11 @@ def balance_teams(players):
 
     cls()
 
-    display_stats(teams)
+    main_menu(teams)
 
 
-def display_stats(teams):
-    while True:
-        cls()
-        print(f"\n{CYB}" + r"""
+def main_menu(teams):
+    print(f"\n{CYB}" + r"""
 ⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷
 ⣿⣿                ⣿⣿
 ⣿⣿   BASKETBALL   ⣿⣿
@@ -68,41 +67,43 @@ def display_stats(teams):
 ⣿⣿  ⠸⣿⡇  ⣿⣿  ⢸⣿⠇  ⣿⣿
 ⣿⣿   ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿   ⣿⣿
 ⢿⣿⣿⡇ ⣿⣿  ⣿⣿  ⣿⣿ ⢸⣿⣿⡿
-     ⢻⣿⣿⣿⣿⣿⣿⣿⣿⡟     
-     ⠸⣿  ⢿⡿  ⣿⠇          
+     ⢻⣿⣿⣿⣿⣿⣿⣿⣿⡟
+     ⠸⣿  ⢿⡿  ⣿⠇
   """ + ST)
-
+    while True:
         print(f"{CG}\n{'₪' * 6} MAIN MENU {'₪' * 6}\n")
 
         print(f"{B} 1) Display Team Stats")
         print(f"{B} 2) Quit\n{ST}")
-
         try:
             selected_option = int(input(f"{CG}Enter an option: {B}"))
-
             if selected_option not in [1, 2]:
                 raise ValueError
             elif selected_option == 1:
                 cls()
+                display_stats(teams)
             elif selected_option == 2:
+                print(f"\nDoeiiiiiii!\n{ST}")
                 break
         except ValueError:
+            cls()
+            print(f"{CRB}Invalid option, please try again!{ST}")
             continue
 
-        print(f"{CG}{'₪' * 6} TEAMS {'₪' * 6}\n{B}")
 
+def display_stats(teams):
+    while True:
+        print(f"{CG}{'₪' * 6} TEAMS {'₪' * 6}\n{B}")
         for i, team in enumerate(teams, 1):
             print(f" {i}) {team}")
-
-        while True:
-            try:
-                selected_team = int(input(f"\n{CG}Enter team number: {B}"))
-                if selected_team not in range(1, len(teams) + 1):
-                    raise ValueError
-            except ValueError:
-                print(f"{CRB}Invalid team number!{ST}")
-                continue
-            break
+        try:
+            selected_team = int(input(f"\n{CG}Enter team number: {B}"))
+            if selected_team not in range(1, len(teams) + 1):
+                raise ValueError
+        except ValueError:
+            cls()
+            print(f"{CRB}Invalid team number!{ST}")
+            continue
 
         team_name = list(teams.keys())[selected_team - 1]
         stats_header = f"    Team {CYB}{team_name}{CG} Stats    "
@@ -115,7 +116,8 @@ def display_stats(teams):
             player for player in team_players if not player['experience']]
         players_names = [player['name'] for player in team_players]
         players_guardians = [
-            guardian for player in team_players for guardian in player['guardians']]
+            guardian for player in team_players
+            for guardian in player['guardians']]
         average_height = sum([player['height']
                              for player in team_players]) / len(team_players)
 
@@ -129,9 +131,7 @@ def display_stats(teams):
         print(
             f"\n{CGB}Guardians:\n\n {BALL} {CBB}{', '.join(players_guardians)}{ST}\n")
         input(f"{CG}Press {B}ENTER{CG} to {CYB}continue{CW}…{ST}")
-
         cls()
-    print(f"\nDoeiiiiiii!\n{ST}")
 
 
 def main():
