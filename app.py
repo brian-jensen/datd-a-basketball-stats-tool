@@ -40,18 +40,12 @@ def clean_data(players):
 
 
 def balance_teams(players):
-    experience_sorted = sorted(
-        players, key=lambda player: player['experience']
-    )
-
+    exp_sort = sorted(players, key=lambda player: player['experience'])
     teams = {team: [] for team in TEAMS}
-
-    for player in experience_sorted:
+    for player in exp_sort:
         team = min(teams, key=lambda team: len(teams[team]))
         teams[team].append(player)
-
     cls()
-
     main_menu(teams)
 
 
@@ -102,34 +96,32 @@ def display_stats(teams):
                 raise ValueError
         except ValueError:
             cls()
-            print(f"{CRB}Invalid team number!{ST}")
+            print(f"{CRB}Invalid team number, please try again!{ST}\n")
             continue
 
         team_name = list(teams.keys())[selected_team - 1]
         stats_header = f"    Team {CYB}{team_name}{CG} Stats    "
-        print(f"\n{CG}{'╔' + '═' * (len(stats_header) - 18) + '╗'}\n║{stats_header}║\n{'╙' + '─' * (len(stats_header) - 18) + '╜'}\n")
+        print(f"\n{CG}{'╔' + '═' * (len(stats_header) - 18) + '╗'}")
+        print(f"║{stats_header}║")
+        print(f"{'╙' + '─' * (len(stats_header) - 18) + '╜'}\n")
 
-        team_players = teams[team_name]
-        experienced_players = [
-            player for player in team_players if player['experience']]
-        inexperienced_players = [
-            player for player in team_players if not player['experience']]
-        players_names = [player['name'] for player in team_players]
-        players_guardians = [
-            guardian for player in team_players
-            for guardian in player['guardians']]
+        players = teams[team_name]
+        exp_players = [player for player in players if player['experience']]
+        noobs = [player for player in players if not player['experience']]
+        names = [player['name'] for player in players]
+        guardians = [
+            guardian for player in players for guardian in player['guardians']]
         average_height = sum([player['height']
-                             for player in team_players]) / len(team_players)
+                             for player in players]) / len(players)
 
-        print(f" {BALL} {CG}Total players: {CBB}{len(team_players)}{ST}")
-        print(f" {BALL} {CG}Total experienced: {CVB}{len(experienced_players)}{ST}")
-        print(
-            f" {BALL} {CG}Total inexperienced: {CVB}{len(inexperienced_players)}{ST}")
+        print(f" {BALL} {CG}Total players: {CBB}{len(players)}{ST}")
+        print(f" {BALL} {CG}Total experienced: {CVB}{len(exp_players)}{ST}")
+        print(f" {BALL} {CG}Total inexperienced: {CVB}{len(noobs)}{ST}")
         print(f" {BALL} {CG}Average height: {CWB}{average_height:.2f}{ST}")
         print(f"\n{CG}{'┉' * (len(stats_header) - 17)}")
-        print(f"\n{CGB}Players:\n\n {BALL} {CBB}{', '.join(players_names)}{ST}")
+        print(f"\n{CGB}Players:\n\n {BALL} {CBB}{', '.join(names)}{ST}")
         print(
-            f"\n{CGB}Guardians:\n\n {BALL} {CBB}{', '.join(players_guardians)}{ST}\n")
+            f"\n{CGB}Guardians:\n\n {BALL} {CBB}{', '.join(guardians)}{ST}\n")
         input(f"{CG}Press {B}ENTER{CG} to {CYB}continue{CW}…{ST}")
         cls()
 
