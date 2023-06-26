@@ -49,6 +49,12 @@ def balance_teams(players):
     main_menu(teams)
 
 
+def handle_errors(err):
+    err_msg = f"{CRB}{err} was not a valid option. Please try again.{ST}"
+    err_msg = err_msg.replace("invalid literal for int() with base 10: ", "")
+    print(err_msg)
+
+
 def main_menu(teams):
     print(f"\n{CYB}" + r"""
 ⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷
@@ -71,31 +77,31 @@ def main_menu(teams):
         try:
             selected_option = int(input(f"{CG}Enter an option: {B}"))
             if selected_option not in [1, 2]:
-                raise ValueError
+                raise ValueError(selected_option)
             elif selected_option == 1:
                 cls()
                 display_stats(teams)
             elif selected_option == 2:
                 print(f"\nDoeiiiiiii!\n{ST}")
                 break
-        except ValueError:
+        except ValueError as err:
             cls()
-            print(f"{CRB}Invalid option, please try again!{ST}")
+            handle_errors(err)
             continue
 
 
 def display_stats(teams):
     while True:
-        print(f"{CG}{'₪' * 6} TEAMS {'₪' * 6}\n{B}")
+        print(f"\n{CG}{'₪' * 6} TEAMS {'₪' * 6}\n{B}")
         for i, team in enumerate(teams, 1):
             print(f" {i}) {team}")
         try:
             selected_team = int(input(f"\n{CG}Enter team number: {B}"))
             if selected_team not in range(1, len(teams) + 1):
-                raise ValueError
-        except ValueError:
+                raise ValueError(selected_team)
+        except ValueError as err:
             cls()
-            print(f"{CRB}Invalid team number, please try again!{ST}\n")
+            handle_errors(err)
             continue
 
         team_name = list(teams.keys())[selected_team - 1]
