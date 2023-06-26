@@ -66,7 +66,6 @@ def main_menu(teams):
   """ + ST)
     while True:
         print(f"{CG}\n{'₪' * 6} MAIN MENU {'₪' * 6}\n")
-
         print(f"{B} 1) Display Team Stats")
         print(f"{B} 2) Quit\n{ST}")
         try:
@@ -105,23 +104,26 @@ def display_stats(teams):
         print(f"║{stats_header}║")
         print(f"{'╙' + '─' * (len(stats_header) - 18) + '╜'}\n")
 
-        players = teams[team_name]
-        exp_players = [player for player in players if player['experience']]
-        noobs = [player for player in players if not player['experience']]
+        players_raw = teams[team_name]
+        players = sorted(
+            players_raw, key=lambda player: player['height'], reverse=True)
+        exp = [player for player in players if player['experience']]
+        no_exp = [player for player in players if not player['experience']]
         names = [player['name'] for player in players]
+        names_height = [f"{CBB}{name}{ST} {CW}{player['height']}\"{ST}"
+                        for name, player in zip(names, players)]
         guardians = [
             guardian for player in players for guardian in player['guardians']]
         average_height = sum([player['height']
                              for player in players]) / len(players)
-
         print(f" {BALL} {CG}Total players: {CBB}{len(players)}{ST}")
-        print(f" {BALL} {CG}Total experienced: {CVB}{len(exp_players)}{ST}")
-        print(f" {BALL} {CG}Total inexperienced: {CVB}{len(noobs)}{ST}")
+        print(f" {BALL} {CG}Total experienced: {CVB}{len(exp)}{ST}")
+        print(f" {BALL} {CG}Total inexperienced: {CVB}{len(no_exp)}{ST}")
         print(f" {BALL} {CG}Average height: {CWB}{average_height:.2f}{ST}")
         print(f"\n{CG}{'┉' * (len(stats_header) - 17)}")
-        print(f"\n{CGB}Players:\n\n {BALL} {CBB}{', '.join(names)}{ST}")
-        print(
-            f"\n{CGB}Guardians:\n\n {BALL} {CBB}{', '.join(guardians)}{ST}\n")
+        print(f"\n{CGB}Players:\n\n {BALL} {', '.join(names_height)}{ST}")
+        print(f"\n{CGB}Guardians:\n")
+        print(f" {BALL} {CBB}{', '.join(guardians)}{ST}\n")
         input(f"{CG}Press {B}ENTER{CG} to {CYB}continue{CW}…{ST}")
         cls()
 
