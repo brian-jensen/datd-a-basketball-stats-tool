@@ -81,6 +81,7 @@ def main_menu(teams):
             elif selected_option == 1:
                 cls()
                 display_stats(teams)
+                break
             elif selected_option == 2:
                 print(f"\nDoeiiiiiii!\n{ST}")
                 break
@@ -132,6 +133,8 @@ def display_stats(teams):
         print(f" {BALL} {CBB}{', '.join(guardians)}{ST}\n")
         input(f"{CG}Press {B}ENTER{CG} to {CYB}continue{CW}…{ST}")
         cls()
+        main_menu(teams)
+        break
 
 
 def main():
